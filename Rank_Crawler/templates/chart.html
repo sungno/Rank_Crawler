@@ -1,0 +1,308 @@
+
+{% load static %}
+
+{% block scripts %}
+
+    <script>
+      function addAlbum() {
+        alert('Adding...');
+      }
+    </script>
+    <link rel="stylesheet" href="{% static 'css/chart.css' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+
+    <script src="{% static 'js/Chart.min.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        function checkInput(sel,item){
+            if($(sel).val().trim().length == 0){
+                alert(item + ' 입력하세요');
+                $(sel).focus();
+                return false;
+            }
+            return true;
+        }
+        $(document).ready(function(){
+            var maxField = 5; //최대 개수
+            var wrapper = $('.append');
+            var extcnt = 1; // 최초 카운트 1
+            $('.add_btn').click(function(){
+                if(extcnt < maxField){
+                    extcnt++; // 숫자 증가
+                    var fieldHTML = '<div><input type="text" name="ext'+extcnt+'" value="" class="input" id="add_input'+extcnt+'"/><a href="#" class="remove_btn"  style=" ">삭제</a></div>';
+                    $('.append').append(fieldHTML); // Add field
+                    $('#extcount').html("" + extcnt + "개");
+                    $('input[name="extcnt"]').val(extcnt);
+                } else {
+                    alert('키워드는 5개까지만 추가할 수 있습니다.');
+                    return;
+                }
+            });
+            $(wrapper).on('click', '.remove_btn', function(e){
+                e.preventDefault();
+                $(this).parent('div').remove(); // Remove field
+                extcnt--; // 카운트 감소
+                $('#extcount').html("" + extcnt + "개");
+                $('input[name="extcnt"]').val(extcnt);
+            });
+
+            $('#submit').click(function(){
+                var product =$('input[name="product"]');
+                if(product.val().trim().length == 0){
+                    alert('제목을 입력하세요');
+                    product.focus();
+                    return false;
+                }
+
+                var extcnt = $("input[name='extcnt']").val();// 동적 필드 생성개수 구함
+                // 동적 입력 항목 입력 여부 체크
+                var i;
+                for(i=1; i <= extcnt;i++){
+                    var sel ='input[name="ext'+i+'"]';
+                    var item= '내용'+i;
+                    if(checkInput(sel,item)==false){
+                        return false;
+                    }
+                };
+                form.submit();
+            });
+
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+
+
+
+
+<main id="main" onload="submit()">
+
+<!-- ======= Breadcrumbs ======= -->
+    <div class="page_title">
+            <h1>키워드 랭킹 시각화</h1>
+<!--            <a href="/rank_page">HOME</a>-->
+    </div>
+
+
+    <form action="" method="get" name="submitForm" class="total_form">
+        <div class="form_box">
+            <div class="keyword_cnt_div">
+                <div class="keyword_cnt">키워드 총갯수</div>
+                <div id="extcount" class="extcount">1개</div>
+            </div>
+            <div class="product_div">
+                <div class="product_name">제품명</div>
+                <input type="text" name="product" value="" class="input" />
+            </div>
+            <div class="keyword_div">
+                <div class="keyword_name">키워드</div>
+                <input type="text" name="ext1" value="" class="input" />
+                <a href="#" class="add_btn" >추가</a>
+                <div class="append"></div>
+            </div>
+            <button type="submit" id="submit" class="submit_btn">입력</button>
+        </div>
+    </form>
+
+
+    <!-- End Breadcrumbs -->
+
+    <!-- ======= Portfolio Section ======= -->
+
+    <div class="total_canvas">
+         <div class="row" data-aos="fade-up" data-aos-delay="200">
+             <div id="container">
+                 <canvas id="canvas"></canvas>
+             </div>
+         </div>
+    </div>
+   <!-- End Portfolio Section -->
+
+</main><!-- End #main -->
+
+
+
+<script>
+var a=0;
+var color = Chart.helpers.color;
+console.log(a)
+alert(a)
+var barChartData = {
+
+     labels: [{% for i in date_distinct %}'{{ i.0 }}',{% endfor %}], // 점검시간(date)
+
+
+     datasets: [
+       {
+
+        label:'{{ ext_all.0.1.1 }}',
+        backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+        borderColor: window.chartColors.red,
+        borderWidth: 1,
+
+        data: [{% for i in ext_all.0 %}'{{ i.0 }}',{% endfor %}]
+        },{
+        label:'{{ ext_all.1.1.1 }}',
+        backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+        borderColor: window.chartColors.blue,
+        borderWidth: 1,
+        data:[{% for i in ext_all.1 %}'{{ i.0 }}',{% endfor %},]
+        },{
+        label:'{{ ext_all.2.1.1 }}',
+        backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+        borderColor: window.chartColors.green,
+        borderWidth: 1,
+        data: [ {% for i in ext_all.2 %}'{{ i.0 }}',{% endfor %},]
+        },{
+        label:'{{ ext4.1.1 }}',
+        backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+        borderColor: window.chartColors.green,
+        borderWidth: 1,
+        data: [{% for i in ext4 %}'{{ i.0 }}',{% endfor %},]
+        },
+     ]
+
+}
+console.log('{{ ext3 }}')
+
+
+
+    var barChartData2 = {
+        labels: [{% for i in date_distinct2 %}'{{ i.0 }}',{% endfor %}], // 점검시간(date_
+        datasets: [{
+            label: '{{ keyword_distinct.0.0 }}',
+            backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+            borderColor: window.chartColors.blue,
+            borderWidth: 1,
+            data: [{% for i in graph_keyword4 %}'{{ i.1 }}',{% endfor %}]
+        },{
+            label: '{{ keyword_distinct.1.0 }}',
+            backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+            borderColor: window.chartColors.blue,
+            borderWidth: 1,
+            data: [{% for i in graph_keyword5 %}'{{ i.1 }}',{% endfor %}]
+        },{
+            label: '{{ keyword_distinct.2.0 }}',
+            backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+            borderColor: window.chartColors.blue,
+            borderWidth: 1,
+            data: [{% for i in graph_keyword6 %}'{{ i.1 }}',{% endfor %}]
+        }
+            ]
+
+    };
+
+
+    window.onload = function() {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        window.myBar = new Chart(ctx, {
+            type: 'line',
+            data: barChartData,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: '{{ product_distinct.0.0 }}'
+                }
+            }
+        });
+
+        var ctx2 = document.getElementById('canvas2').getContext('2d');
+        window.myBar = new Chart(ctx2, {
+            type: 'line',
+            data: barChartData2,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: '{{ product_distinct.0.1 }}'
+                }
+            }
+        });
+
+
+    };
+
+    document.getElementById('randomizeData').addEventListener('click', function() {
+        var zero = Math.random() < 0.2 ? true : false;
+        barChartData.datasets.forEach(function(dataset) {
+            dataset.data = dataset.data.map(function() {
+                return zero ? 0.0 : randomScalingFactor();
+            });
+
+        });
+        window.myBar.update();
+    });
+
+    var colorNames = Object.keys(window.chartColors);
+
+
+
+        document.getElementById('addDataset').addEventListener('click', function() {
+
+            var colorName = colorNames[barChartData.datasets.length % colorNames.length];
+            var dsColor = window.chartColors[colorName];
+            var newDataset = {
+                label:'Dataset ' + (barChartData.datasets.length + 1),
+<!--                    label:'{{ keyword_distinct.1.0 }}', &lt;!&ndash; 산양삼 &ndash;&gt;-->
+                backgroundColor: color(dsColor).alpha(0.5).rgbString(),
+                borderColor: dsColor,
+                borderWidth: 1,
+                data: []
+            };
+
+            for (var index = 0; index < barChartData.labels.length; ++index) {
+                newDataset.data.push({% for i in graph_keyword2 %}'{{ i.1 }}',{% endfor %});
+            }
+
+<!--                document.write('{{keyword_distinct}}');-->
+            barChartData.datasets.push(newDataset);
+            window.myBar.update();
+
+        });
+
+
+
+
+
+
+    document.getElementById('addData').addEventListener('click', function() {
+        if (barChartData.datasets.length > 0) {
+            var month = MONTHS[barChartData.labels.length % MONTHS.length];
+            barChartData.labels.push(month);
+
+            for (var index = 0; index < barChartData.datasets.length; ++index) {
+                // window.myBar.addData(randomScalingFactor(), index);
+                barChartData.datasets[index].data.push(randomScalingFactor());
+            }
+
+            window.myBar.update();
+        }
+    });
+
+    document.getElementById('removeDataset').addEventListener('click', function() {
+        barChartData.datasets.pop();
+        window.myBar.update();
+    });
+
+    document.getElementById('removeData').addEventListener('click', function() {
+        barChartData.labels.splice(-1, 1); // remove the label first
+
+        barChartData.datasets.forEach(function(dataset) {
+            dataset.data.pop();
+        });
+
+        window.myBar.update();
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript">
+    function search(){
+        var tb=document.getElementById("tbox");
+        alert(tb.value);
+
+    }
+</script>
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+
+
+
+<body>
+    <label for="pet-select">Choose a pet:</label>
+
+    <select name="pets" id="pet-select">
+        <option value="">--Please choose an option--</option>
+        <option value="dog">Dog</option>
+        <option value="cat">Cat</option>
+    </select>
+    <form>
+        <input type="text" id="tbox" name="a">
+        <input type="button" value="검색" onclick="search();">
+    </form>
+
+</body>
+
+
+
+</html>

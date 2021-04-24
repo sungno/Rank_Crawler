@@ -19,7 +19,7 @@
 #         cursor.execute('SELECT product_name, total_rank, date, keyword FROM rank_search')
 #         graph = cursor.fetchall()
 #
-#     return render(request,"chart_bar2.html",{
+#     return render(request,"chart",{
 #         'title': '상품 순위',
 #         'dititle': '몰라',
 #         'dititle': '몰라2',
