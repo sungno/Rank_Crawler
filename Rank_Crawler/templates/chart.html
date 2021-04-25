@@ -129,7 +129,7 @@
 var a=0;
 var color = Chart.helpers.color;
 console.log(a)
-alert(a)
+//alert(a)
 var barChartData = {
 
      labels: [{% for i in date_distinct %}'{{ i.0 }}',{% endfor %}], // 점검시간(date)
@@ -213,96 +213,96 @@ console.log('{{ ext3 }}')
             }
         });
 
-        var ctx2 = document.getElementById('canvas2').getContext('2d');
-        window.myBar = new Chart(ctx2, {
-            type: 'line',
-            data: barChartData2,
-            options: {
-                responsive: true,
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: '{{ product_distinct.0.1 }}'
-                }
-            }
-        });
+        // var ctx2 = document.getElementById('canvas2').getContext('2d');
+        // window.myBar = new Chart(ctx2, {
+        //     type: 'line',
+        //     data: barChartData2,
+        //     options: {
+        //         responsive: true,
+        //         legend: {
+        //             position: 'top',
+        //         },
+        //         title: {
+        //             display: true,
+        //             text: '{{ product_distinct.0.1 }}'
+        //         }
+        //     }
+        // });
 
 
     };
 
-    document.getElementById('randomizeData').addEventListener('click', function() {
-        var zero = Math.random() < 0.2 ? true : false;
-        barChartData.datasets.forEach(function(dataset) {
-            dataset.data = dataset.data.map(function() {
-                return zero ? 0.0 : randomScalingFactor();
-            });
+    // document.getElementById('randomizeData').addEventListener('click', function() {
+    //     var zero = Math.random() < 0.2 ? true : false;
+    //     barChartData.datasets.forEach(function(dataset) {
+    //         dataset.data = dataset.data.map(function() {
+    //             return zero ? 0.0 : randomScalingFactor();
+    //         });
 
-        });
-        window.myBar.update();
-    });
+    //     });
+    //     window.myBar.update();
+    // });
 
     var colorNames = Object.keys(window.chartColors);
 
 
 
-        document.getElementById('addDataset').addEventListener('click', function() {
+//         document.getElementById('addDataset').addEventListener('click', function() {
 
-            var colorName = colorNames[barChartData.datasets.length % colorNames.length];
-            var dsColor = window.chartColors[colorName];
-            var newDataset = {
-                label:'Dataset ' + (barChartData.datasets.length + 1),
-<!--                    label:'{{ keyword_distinct.1.0 }}', &lt;!&ndash; 산양삼 &ndash;&gt;-->
-                backgroundColor: color(dsColor).alpha(0.5).rgbString(),
-                borderColor: dsColor,
-                borderWidth: 1,
-                data: []
-            };
+//             var colorName = colorNames[barChartData.datasets.length % colorNames.length];
+//             var dsColor = window.chartColors[colorName];
+//             var newDataset = {
+//                 label:'Dataset ' + (barChartData.datasets.length + 1),
+// <!--                    label:'{{ keyword_distinct.1.0 }}', &lt;!&ndash; 산양삼 &ndash;&gt;-->
+//                 backgroundColor: color(dsColor).alpha(0.5).rgbString(),
+//                 borderColor: dsColor,
+//                 borderWidth: 1,
+//                 data: []
+//             };
 
-            for (var index = 0; index < barChartData.labels.length; ++index) {
-                newDataset.data.push({% for i in graph_keyword2 %}'{{ i.1 }}',{% endfor %});
-            }
+//             for (var index = 0; index < barChartData.labels.length; ++index) {
+//                 newDataset.data.push({% for i in graph_keyword2 %}'{{ i.1 }}',{% endfor %});
+//             }
 
-<!--                document.write('{{keyword_distinct}}');-->
-            barChartData.datasets.push(newDataset);
-            window.myBar.update();
+// <!--                document.write('{{keyword_distinct}}');-->
+//             barChartData.datasets.push(newDataset);
+//             window.myBar.update();
 
-        });
-
-
+//         });
 
 
 
 
-    document.getElementById('addData').addEventListener('click', function() {
-        if (barChartData.datasets.length > 0) {
-            var month = MONTHS[barChartData.labels.length % MONTHS.length];
-            barChartData.labels.push(month);
 
-            for (var index = 0; index < barChartData.datasets.length; ++index) {
-                // window.myBar.addData(randomScalingFactor(), index);
-                barChartData.datasets[index].data.push(randomScalingFactor());
-            }
 
-            window.myBar.update();
-        }
-    });
+    // document.getElementById('addData').addEventListener('click', function() {
+    //     if (barChartData.datasets.length > 0) {
+    //         var month = MONTHS[barChartData.labels.length % MONTHS.length];
+    //         barChartData.labels.push(month);
 
-    document.getElementById('removeDataset').addEventListener('click', function() {
-        barChartData.datasets.pop();
-        window.myBar.update();
-    });
+    //         for (var index = 0; index < barChartData.datasets.length; ++index) {
+    //             // window.myBar.addData(randomScalingFactor(), index);
+    //             barChartData.datasets[index].data.push(randomScalingFactor());
+    //         }
 
-    document.getElementById('removeData').addEventListener('click', function() {
-        barChartData.labels.splice(-1, 1); // remove the label first
+    //         window.myBar.update();
+    //     }
+    // });
 
-        barChartData.datasets.forEach(function(dataset) {
-            dataset.data.pop();
-        });
+    // document.getElementById('removeDataset').addEventListener('click', function() {
+    //     barChartData.datasets.pop();
+    //     window.myBar.update();
+    // });
 
-        window.myBar.update();
-    });
+    // document.getElementById('removeData').addEventListener('click', function() {
+    //     barChartData.labels.splice(-1, 1); // remove the label first
+
+    //     barChartData.datasets.forEach(function(dataset) {
+    //         dataset.data.pop();
+    //     });
+
+    //     window.myBar.update();
+    // });
 </script>
 
 {% endblock %}
